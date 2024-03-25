@@ -891,4 +891,3 @@ AS
 BEGIN
 	DELETE FROM Students WHERE Id = @Id
 END
-GO
