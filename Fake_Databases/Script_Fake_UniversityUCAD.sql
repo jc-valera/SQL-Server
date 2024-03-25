@@ -729,32 +729,166 @@ INSERT INTO Students VALUES ('ELADIO', 'ZACARÍAS', 'OVANDO', '10-25-1987', 36, 1
 INSERT INTO Students VALUES ('TOMÁS', 'ZÚÑIGA', 'DOMÍNGUEZ', '11-29-1991', 32, 1, 1, 4, 5, 2)
 INSERT INTO Students VALUES ('JOSÉ', 'BRINDIZ', 'FERNÁNDEZ', '03-05-1999', 25, 1, 4, 4, 1, 2)
 INSERT INTO Students VALUES ('DONATO', 'CRUZ', 'SÁNCHEZ', '12-29-2007', 16, 1, 7, 3, 2, 1)
-
+GO
 
 
 /*
 	Test Querys to consult information
+
+	--SELECT * FROM Students
+
+	--SELECT S.Names,
+	--	S.FirstSurname,
+	--	S.SecondSurname,
+	--	S.BirthDate,
+	--	S.Age,
+	--	G.Description,
+	--	C.Description,
+	--	M.Description,
+	--	CS.Description,
+	--	SS.Description
+	--	FROM Students S
+	--	INNER JOIN cat_Gender G ON G.Id = S.GenderId
+	--	INNER JOIN cat_Carrers C ON C.Id = S.CarrersId
+	--	INNER JOIN cat_MaximunLevelStudies M ON M.Id = S.MaximunLevelStudiesId
+	--	INNER JOIN cat_CivilStatus CS ON CS.Id = S.CivilStatusId
+	--	INNER JOIN cat_StudentStatus SS ON SS.Id = S.StudentStatusId
+
+	--GO
 */
 
-SELECT * FROM Students
+CREATE PROCEDURE sp_GetCarrers
+AS
+BEGIN
+	SELECT Id, Description 
+		FROM cat_Carrers
+END 
+GO
 
-SELECT S.Names,
-	S.FirstSurname,
-	S.SecondSurname,
-	S.BirthDate,
-	S.Age,
-	G.Description,
-	C.Description,
-	M.Description,
-	CS.Description,
-	SS.Description
-	FROM Students S
-	INNER JOIN cat_Gender G ON G.Id = S.GenderId
-	INNER JOIN cat_Carrers C ON C.Id = S.CarrersId
-	INNER JOIN cat_MaximunLevelStudies M ON M.Id = S.MaximunLevelStudiesId
-	INNER JOIN cat_CivilStatus CS ON CS.Id = S.CivilStatusId
-	INNER JOIN cat_StudentStatus SS ON SS.Id = S.StudentStatusId
+CREATE PROCEDURE sp_GetCivilStatus
+AS 
+BEGIN
+	SELECT Id, Description
+		FROM cat_CivilStatus
+END
+GO
+
+CREATE PROCEDURE sp_GetGenders
+AS
+BEGIN
+	SELECT Id, Description
+		FROM cat_Gender
+
+END
+GO
 
 
+CREATE PROCEDURE sp_GetAllMaximunLevelStudies
+AS 
+BEGIN
+	SELECT Id, Description
+		FROM cat_MaximunLevelStudies
+END 
+GO
 
 
+CREATE PROCEDURE sp_GetAllStudentStatus
+AS
+BEGIN
+	SELECT Id, Description
+		FROM cat_StudentStatus
+END 
+GO
+
+CREATE PROCEDURE sp_GetAllStudent
+AS
+BEGIN
+	SELECT TOP 10 [Id]
+      ,[Names]
+      ,[FirstSurname]
+      ,[SecondSurname]
+      ,[BirthDate]
+      ,[Age]
+      ,[GenderId]
+      ,[CarrersId]
+      ,[MaximunLevelStudiesId]
+      ,[CivilStatusId]
+      ,[StudentStatusId]
+  FROM Students
+
+END
+GO
+
+CREATE PROCEDURE sp_SaveStudent
+	@Names VARCHAR(100),
+	@FirstSurname VARCHAR(100),
+	@SecondSurname VARCHAR(100),
+	@BirthDate DATE,
+	@Age INT,
+	@GenderId INT,
+	@CarrersId INT,
+	@MaximunLevelStudiesId INT,
+	@CivilStatusId INT,
+	@StudentStatusId INT
+AS
+BEGIN
+	INSERT INTO 
+		Students (Names,
+		FirstSurname,
+		SecondSurname,
+		BirthDate,
+		Age,
+		GenderId,
+		CarrersId,
+		MaximunLevelStudiesId,
+		CivilStatusId,
+		StudentStatusId)
+		VALUES (@Names,
+		@FirstSurname,
+		@SecondSurname,
+		@BirthDate,
+		@Age,
+		@GenderId,
+		@CarrersId,
+		@MaximunLevelStudiesId,
+		@CivilStatusId,
+		@StudentStatusId)
+END
+GO
+
+CREATE PROCEDURE sp_UpdateStudent
+	@Id INT,
+	@Names VARCHAR(100),
+	@FirstSurname VARCHAR(100),
+	@SecondSurname VARCHAR(100),
+	@BirthDate DATE,
+	@Age INT,
+	@GenderId INT,
+	@CarrersId INT,
+	@MaximunLevelStudiesId INT,
+	@CivilStatusId INT,
+	@StudentStatusId INT
+AS
+BEGIN
+	UPDATE Students 
+	SET Names = @Names,
+		FirstSurname = @FirstSurname,
+		SecondSurname = @SecondSurname,
+		BirthDate = @BirthDate,
+		Age = @Age,
+		GenderId = @GenderId,
+		CarrersId = @CarrersId,
+		MaximunLevelStudiesId = @MaximunLevelStudiesId,
+		CivilStatusId = @CivilStatusId,
+		StudentStatusId = @StudentStatusId
+	WHERE Id = @Id
+END
+GO
+
+CREATE PROCEDURE sp_DeleteStudent
+	@Id INT
+AS
+BEGIN
+	DELETE FROM Students WHERE Id = @Id
+END
+GO
